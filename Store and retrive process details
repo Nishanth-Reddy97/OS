@@ -1,0 +1,117 @@
+#include <stdio.h>
+
+// Define a structure to hold process details
+struct Process {
+    int pid;                     // Process ID
+    char name[50];                // Process name
+    int arrivalTime;             // Process arrival time
+    int completionTime;          // Process completion time
+    int executionTime;           // Process execution time
+};
+
+// Function to input process details
+void inputProcessDetails(struct Process* p) {
+    printf("Enter Process Name: ");
+    scanf("%s", p->name);  // Read string with spaces
+    printf("Enter Arrival Time: ");
+    scanf("%d", &p->arrivalTime);
+    printf("Enter Execution Time: ");
+    scanf("%d", &p->executionTime);
+    p->completionTime = p->arrivalTime + p->executionTime; // For simplicity
+}
+
+// Function to display the details of all processes
+void displayProcessDetails(struct Process processes[], int n) {
+    printf("\nProcess Details:\n");
+    printf("PID\tName\tArrival Time\tExecution Time\tCompletion Time\n");
+
+    for (int i = 0; i < n; i++) {
+        printf("%d\t%s\t%d\t\t%d\t\t%d\n",
+               processes[i].pid,
+               processes[i].name,
+               processes[i].arrivalTime,
+               processes[i].executionTime,
+               processes[i].completionTime);
+    }
+}
+
+// Function to search for a process by PID and display its details
+void searchProcessById(struct Process processes[], int n, int pid) {
+    int found = 0;
+    for (int i = 0; i < n; i++) {
+        if (processes[i].pid == pid) {
+            printf("\nProcess found with PID %d:\n", pid);
+            printf("PID: %d\n", processes[i].pid);
+            printf("Name: %s\n", processes[i].name);
+            printf("Arrival Time: %d\n", processes[i].arrivalTime);
+            printf("Execution Time: %d\n", processes[i].executionTime);
+            printf("Completion Time: %d\n", processes[i].completionTime);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Process with PID %d not found.\n", pid);
+    }
+}
+
+int main() {
+    int n, choice, searchPid;
+
+    // Ask the user for the number of processes
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    // Create an array of structures to store process details
+    struct Process processes[n];
+
+    do {
+        // Display the menu options
+        printf("\nMenu:\n");
+        printf("1. Input Process Details\n");
+        printf("2. Display All Process Details\n");
+        printf("3. Search Process by PID\n");
+        printf("4. Exit\n");
+
+        // Ask the user to choose an option
+        printf("Enter your choice (1-4): ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                // Input process details
+                for (int i = 0; i < n; i++) {
+                    printf("\nEnter details for Process %d:\n", i + 1);
+                    processes[i].pid = i + 1;  // Assign PID automatically starting from 1
+                    inputProcessDetails(&processes[i]);  // Call the function to input details
+                }
+                break;
+
+            case 2:
+                // Display all process details
+                displayProcessDetails(processes, n);
+                break;
+
+            case 3:
+                // Search process by PID
+                printf("\nEnter PID to search: ");
+                scanf("%d", &searchPid);
+                searchProcessById(processes, n, searchPid);  // Call the function to search for a process by PID
+                break;
+
+            case 4:
+                // Exit the program
+                printf("Exiting program.\n");
+                break;
+
+            default:
+                // Invalid option
+                printf("Invalid choice! Please try again.\n");
+                break;
+        }
+
+    } while (choice != 4);  // Continue until the user chooses to exit (option 4)
+
+    return 0;
+}
